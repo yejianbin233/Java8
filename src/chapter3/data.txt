@@ -1,0 +1,114 @@
+```
+Lambda 表达式可以理解为简洁地表示"可传递"的匿名函数的一种方式：
+
+1. 没有名称
+2. 有参数列表
+3. 函数主体
+4. 返回值
+5. 可能还有可以抛出的异常列表
+```
+> 语法
+```
+(parameters) -> expression
+
+或
+
+(parameters) ->{ statements; }
+```
+```
+1. 可选类型声明：不需要声明参数类型，编译器可以统一识别参数值
+
+2. 可选的参数圆括号：一个参数无需定义圆括号，但多个参数需要定义圆括号。
+
+3. 可选的大括号：如果主体包含了一个语句，就不需要使用大括号。
+
+4. 可选的返回关键字：如果主体只有一个表达式返回值则编译器会自动返回值，大括号需要指定明表达
+式返回了一个数值。
+```
+> 如何使用 Lambda
+```
+在函数式接口上使用 Lambda 表达式。
+
+Lambda 表达式允许直接以内联的形式为函数式接口的抽象方法提供实现，并把整个表达式作为函数式接口的实例。
+```
+```
+Lambda 表达式传入的函数必须实现 @FunctionalInterface 注解的定义
+
+如果不是用该注解,但满足注解的所有条件,那么编译器会自动添加以使其可以使用 Lambda 表达式。
+```
+[函数式接口 - 传送门](http://note.youdao.com/noteshare?id=e711f0e286c2f6a144348f3b92b9a7ab&sub=1BFCD5F7B5F64D678C54B72F17BDD99F)
+> Lambda 实践
+```
+1. 行为参数化
+2. 使用函数式接口来传递行为
+3. 执行行为
+4. 传递 Lambda
+
+需求：根据条件来筛选苹果
+
+1. 行为参数化,使方法可以调用行为
+getApplesByCondition(List<Apple> apples,AppleOperator operator){
+    List<Apple> result = new ArrayList<>();
+    for (Apple item : apples) {
+        //if (operator.test(item)) {
+        //   result.add(item);
+        //}
+    }
+}
+2. 定义函数式接口
+@FunctionalInterface
+public interface AppleOperator{
+    boolean test(Apple apple);
+}
+
+3. 执行行为
+getApplesByCondition(List<Apple> apples,AppleOperator operator){
+    List<Apple> result = new ArrayList<>();
+    for (Apple item : apples) {
+        // 执行函数式接口的行为
+        if (operator.test(item)) {
+           result.add(item);
+        }
+    }
+}
+
+4. 传递 Lambda 表达式
+    a. getApplesByCondition(List<Apple> apples,(Apple apple) -> app.getColor().equals('green'));
+    b. getApplesByCondition(List<Apple> apples,(Apple apple) -> app.getWeight() > 150);
+```
+> Lambda 实现细节及规则
+```
+1. 类型检查
+Lambda 的"类型检查"是"从使用 Lambda 的上下文推断出来的"。
+
+类型检查过程：
+
+1. 查看使用了 Lambda 表达式的方法的定义
+2. 得到目标类型
+3. 得到目标抽象方法
+4. 检查目标类型的函数描述符与 Lambda 签名是否匹配
+```
+```
+2. 类型推断
+Java 编译器会从上下文(目标类型)推断出用什么函数接口来配合 Lambda 表达式,可以了解 Lambda 表达式的参数类型,并在 Lambda 语法中省去标注参数类型。
+```
+```
+3. 使用局部变量
+Lambda 表达式允许使用"自由变量"(在外层作用域中定义的变量),但局部变量必须显式声明为 "final" / 事实上的 "final" - 只赋值一次。
+
+// TODO - 理解不够透彻
+```
+```
+4. 方法引用
+方法引用可以重复使用现有的方法定义,并像 Lambda 一样传递。
+
+方法引用示例：Apple::getWeight == (Apple apple) -> apple.getWeight()
+
+事实上,方法引用就是让你根据已有的方法实现来创建 Lambda 表达式。
+
+方法引用的类型：
+
+1. 指向静态的方法引用：ClassName::staticMethod
+2. 指向任意类型实例方法的方法引用：ClassName::instanceMethod
+3. 指向现有对象的实例方法的方法引用：expr::instanceMethod
+```
