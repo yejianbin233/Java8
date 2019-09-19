@@ -31,7 +31,7 @@ public class Apple {
     public static Apple builder(){
         Map<Integer,String> colors = getAppleColorMap();
         Random random = new Random();
-        return new Apple(colors.get(random.nextInt(7)),random.nextInt(100)+100);
+        return new Apple(colors.get(random.nextInt(6)+1),random.nextInt(100)+100);
     }
 
     private static Map<Integer,String> getAppleColorMap(){
@@ -64,5 +64,13 @@ public class Apple {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Apple{" +
+                "color='" + color + '\'' +
+                ", weight=" + weight +
+                '}';
     }
 }
