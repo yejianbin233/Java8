@@ -4,6 +4,7 @@ package chapter5;/**
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yejianbin
@@ -46,6 +47,8 @@ public class FindAndMatchDemo {
         * 而 findAny() 是只要 Stream 中存在元素即可满足条件，直接返回该元素。
         * 这就是 findAny() 与 findFirst() 结果一致的原因。
         * 可是，为什么 findAny 不随机返回一个呢？我个人感觉 findAny 的语义就是返回任意一个，每个都是随机的...
+        *
+        * ps：经过又一次查阅《Java 8 实战》后，findAny 与 FindFirst 的区别主要在于"并行"处理上，findAny 在并行上的限制更少...
         * */
 
 //        int result = fruits.stream().map(f -> f.getPrice())
@@ -62,7 +65,7 @@ public class FindAndMatchDemo {
 
 //        List<Fruit> result = fruits.stream().sorted(comparing(fruit -> fruit.getPrice())).collect(toList());
 
-        System.out.println(result);
+//        System.out.println(result);
     }
 
     public static class Fruit {
