@@ -31,10 +31,14 @@ public class Feed implements Subject{
 
     public static void main(String[] args) {
         Feed feed = new Feed();
+        // 普通方式使用观察者模式
         feed.registerObserver(new NYTimes());
         feed.registerObserver(new LeMonde());
         feed.registerObserver(new Guardian());
-
         feed.notifyObservers("eating Feed.");
+
+        // Lambda 表达式使用观察者模式
+        feed.registerObserver(s -> System.out.println("Lambda =" + s));
+        feed.notifyObservers("eating again");
     }
 }
